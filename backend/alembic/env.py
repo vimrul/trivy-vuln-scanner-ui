@@ -2,6 +2,13 @@ import os
 from logging.config import fileConfig
 from sqlalchemy import engine_from_config, pool
 from alembic import context
+from app.models import Base
+
+# pull in your settings
+from app.config import settings
+
+# point Alembic at your models’ metadata
+target_metadata = Base.metadata
 
 # this is the Alembic Config object, which provides access to
 # the values within the .ini file in use.
