@@ -69,3 +69,19 @@ def create_vulnerabilities(db: Session, report_id: int, vulns: list):
     db.bulk_save_objects(objs)
     db.commit()
     return objs
+
+# in crud.py
+
+def get_images_by_project(db: Session, project_id: int):
+    return db.query(models.Image).filter(models.Image.project_id == project_id).all()
+
+
+def get_image_by_id(db: Session, image_id: int):
+    return db.query(models.Image).filter(models.Image.id == image_id).first()
+
+
+def get_vulnerabilities(db: Session, report_id: int, vtype: Optional[str] = None):
+    q = db.query(models.Vulnerability).filter(models.Vulnerability.report_id == report_id)
+    if vtype:
+        q = q.filter(models.Vulnerability.type == vtype)
+    return q.all()
