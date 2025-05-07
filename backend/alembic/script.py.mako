@@ -1,7 +1,7 @@
 """${message}
 
 Revision ID: ${up_revision}
-Revises: ${down_revision if down_revision else None}
+Revises: ${down_revision or None}
 Create Date: ${create_date}
 """
 from alembic import op
