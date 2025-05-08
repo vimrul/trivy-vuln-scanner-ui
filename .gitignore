@@ -1,4 +1,6 @@
+# Python virtualenv
 .venv/
+
 # Python bytecode
 __pycache__/
 *.py[cod]
@@ -14,7 +16,27 @@ backend/alembic/alembic.ini
 # Pydantic compiled config cache
 backend/app/__pycache__/
 
-# System/editor junk
+# Frontend dependencies and build
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor/IDE junk
+.vscode/
+.idea/
 *.swp
 *.swo
-*.DS_Store
+.DS_Store
+
+# OS-specific
+Thumbs.db
+
+# TypeScript cache (optional)
+*.tsbuildinfo
