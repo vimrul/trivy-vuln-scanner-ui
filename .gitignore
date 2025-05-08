@@ -1,1 +1,20 @@
 .venv/
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Env files
+*.env
+
+# Alembic cache & compiled files
+backend/alembic/__pycache__/
+backend/alembic/versions/__pycache__/
+backend/alembic/alembic.ini
+
+# Pydantic compiled config cache
+backend/app/__pycache__/
+
+# System/editor junk
+*.swp
+*.swo
+*.DS_Store
