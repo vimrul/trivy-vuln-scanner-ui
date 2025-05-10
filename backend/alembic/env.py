@@ -1,29 +1,27 @@
+import sys
 import os
+
+# 👇 Fix: Add parent directory to sys.path *before* importing app
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
 from logging.config import fileConfig
 from sqlalchemy import engine_from_config, pool
 from alembic import context
+
+# ✅ Now these will work
+from app.config import settings
 from app.models import Base
 
-# pull in your settings
-from app.config import settings
-
-# point Alembic at your models’ metadata
-target_metadata = Base.metadata
-
-# this is the Alembic Config object, which provides access to
-# the values within the .ini file in use.
+# this is the Alembic Config object
 config = context.config
 
-# Interpret the config file for Python logging.
-fileConfig(config.config_file_name)
-
-# add your model's MetaData object here
-from app.config import settings
-from app.models import Base
-
-# set SQLAlchemy URL dynamically
+# Configure SQLAlchemy URL dynamically
 config.set_main_option('sqlalchemy.url', settings.DATABASE_URL)
 
+# Interpret the config file for Python logging
+fileConfig(config.config_file_name)
+
+# Set metadata
 target_metadata = Base.metadata
 
 def run_migrations_offline():
