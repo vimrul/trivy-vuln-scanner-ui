@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
-const Login = () => {
+const LoginPage = () => {
   const [email, setEmail] = useState('admin@admin.com');
   const [password, setPassword] = useState('password123');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { setToken } = useAuth();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,11 +21,18 @@ const Login = () => {
           username: email,
           password: password,
         }),
-        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        }
       );
 
-      localStorage.setItem('token', response.data.access_token);
-      navigate('/dashboard'); // Redirect to dashboard after login
+      const token = response.data.access_token;
+      setToken(token); // set token in context
+      localStorage.setItem('token', token); // optionally persist
+
+      navigate('/projects'); // redirect after login
     } catch (err: any) {
       setError('Login failed. Check credentials.');
     }
@@ -63,4 +72,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginPage;
