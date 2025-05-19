@@ -1,3 +1,4 @@
+// src/App.tsx
 import { Routes, Route } from 'react-router-dom';
 import LoginPage from './routes/LoginPage';
 import ProjectList from './routes/ProjectList';
@@ -8,7 +9,7 @@ const App = () => {
   return (
     <Routes>
       <Route path="/" element={<LoginPage />} />
-      <Route path="/dashboard" element={<ProjectList />} />
+      <Route path="/projects" element={<ProjectList />} />
       <Route path="/projects/:id" element={<ProjectDetail />} />
       <Route path="/history" element={<HistoryPage />} />
     </Routes>
