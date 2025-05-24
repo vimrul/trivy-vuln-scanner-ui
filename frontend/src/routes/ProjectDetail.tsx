@@ -1,13 +1,14 @@
-// src/routes/ProjectDetail.tsx
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-export default function ProjectDetail() {
-  let { id } = useParams<{ id: string }>();
+const ProjectDetail = () => {
+  const { id } = useParams();
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold">Project #{id}</h1>
-      {/* fetch & show images, vulnerability charts, etc. */}
+    <div className="p-8">
+      <h1 className="text-2xl font-bold">Project Detail: {id}</h1>
+      {/* TODO: fetch images & reports for this project */}
     </div>
   );
-}
+};
+
+export default ProjectDetail;

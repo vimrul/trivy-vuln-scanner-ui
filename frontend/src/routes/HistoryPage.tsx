@@ -1,15 +1,24 @@
-// src/routes/HistoryPage.tsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { getReports } from '../services/reportService';
 
-export default function HistoryPage() {
+const HistoryPage = () => {
   const { token } = useAuth();
-  // you’ll probably fetch history here...
+  const [reports, setReports] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (!token) return;
+    getReports(token).then(setReports).catch(console.error);
+  }, [token]);
+
   return (
-    <div className="p-6">
+    <div className="p-8">
       <h1 className="text-2xl font-bold mb-4">Scan History</h1>
-      <p>Your past scan reports will show up here.</p>
+      <pre className="bg-gray-100 p-4 rounded">
+        {JSON.stringify(reports, null, 2)}
+      </pre>
     </div>
   );
-}
+};
+
+export default HistoryPage;

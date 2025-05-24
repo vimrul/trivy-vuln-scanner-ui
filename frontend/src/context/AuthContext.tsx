@@ -2,29 +2,41 @@ import React, {
   createContext,
   useContext,
   useState,
-  useEffect,
   ReactNode,
+  useEffect
 } from 'react';
 
 interface AuthContextType {
   token: string | null;
-  setToken: (t: string | null) => void;
+  setToken: (tok: string | null) => void;
 }
 
 const AuthContext = createContext<AuthContextType>({
   token: null,
-  setToken: () => {},
+  setToken: () => {}
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [token, setToken] = useState<string | null>(
+  const [token, rawSetToken] = useState<string | null>(
     () => localStorage.getItem('token')
   );
 
+  const setToken = (tok: string | null) => {
+    if (tok) {
+      localStorage.setItem('token', tok);
+    } else {
+      localStorage.removeItem('token');
+    }
+    rawSetToken(tok);
+  };
+
+  // keep in sync if you ever call localStorage elsewhere
   useEffect(() => {
-    if (token) localStorage.setItem('token', token);
-    else localStorage.removeItem('token');
-  }, [token]);
+    const stored = localStorage.getItem('token');
+    if (stored && stored !== token) {
+      rawSetToken(stored);
+    }
+  }, []);
 
   return (
     <AuthContext.Provider value={{ token, setToken }}>
