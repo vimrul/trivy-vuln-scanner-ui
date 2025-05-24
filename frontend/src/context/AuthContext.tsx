@@ -1,29 +1,16 @@
-// frontend/src/context/AuthContext.tsx
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import React, { createContext, useContext, useState } from 'react'
 
 interface AuthContextType {
   token: string | null
-  setToken: (t: string) => void
+  setToken: (tok: string | null) => void
 }
 
-const AuthContext = createContext<AuthContextType>({
-  token: null,
-  setToken: () => {}
-})
+const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-export const AuthProvider: React.FC<{children: React.ReactNode}> = ({ children }) => {
-  const [token, _setToken] = useState<string | null>(null)
-
-  useEffect(() => {
-    const t = localStorage.getItem('token')
-    if (t) _setToken(t)
-  }, [])
-
-  const setToken = (t: string) => {
-    _setToken(t)
-    localStorage.setItem('token', t)
-  }
-
+export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+  const [token, setToken] = useState<string | null>(() =>
+    localStorage.getItem('token')
+  )
   return (
     <AuthContext.Provider value={{ token, setToken }}>
       {children}
@@ -31,4 +18,8 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({ children }
   )
 }
 
-export const useAuth = () => useContext(AuthContext)
+export const useAuth = () => {
+  const ctx = useContext(AuthContext)
+  if (!ctx) throw new Error('useAuth must be inside AuthProvider')
+  return ctx
+}
