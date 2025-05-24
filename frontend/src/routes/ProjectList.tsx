@@ -1,42 +1,30 @@
 // src/routes/ProjectList.tsx
 import React, { useEffect, useState } from 'react';
+import { useAuth } from '../context/AuthContext';
 import { getProjects } from '../services/projectService';
-import { Project } from '../types';
-import ProjectCard from '../components/ProjectCard';
-import { fetchProjects } from '../services/projectService';
 
+interface Project { id: number; name: string; description: string; }
 
-const ProjectList: React.FC = () => {
+export default function ProjectList() {
+  const { token } = useAuth();
   const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const data = await getProjects();
-        setProjects(data);
-      } catch (error) {
-        console.error('Error fetching projects:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (!token) return;
+    getProjects(token).then(setProjects).catch(console.error);
+  }, [token]);
 
-    fetchProjects();
-  }, []);
-
-  if (loading) return <div className="text-center mt-10">Loading projects...</div>;
+  if (!token) return <p>Please log in.</p>;
 
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Your Projects</h1>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {projects.map((project) => (
-          <ProjectCard key={project.id} project={project} />
-        ))}
-      </div>
+      {projects.map((p) => (
+        <div key={p.id} className="border p-4 rounded mb-2">
+          <a href={`/projects/${p.id}`} className="text-blue-600">{p.name}</a>
+          <p>{p.description}</p>
+        </div>
+      ))}
     </div>
   );
-};
-
-export default ProjectList;
+}
